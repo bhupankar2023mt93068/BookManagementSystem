@@ -2,9 +2,9 @@
   "name": "inventory",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",

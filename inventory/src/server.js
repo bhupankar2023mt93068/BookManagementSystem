@@ -1,24 +1,12 @@
-const mongoose = require('mongoose');
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors'); // Import cors
+const mongoose = require('mongoose');
+const Book = require('./db/BookDB'); // Import the Book model from BookDB.js
+const applyMiddleware = require('./config/middleware'); // Import middleware.js
 
 const app = express();
-app.use(bodyParser.json());
 
-// Middleware
-app.use(cors()); // Enable CORS for all routes
-app.use(express.json());
-
-// Define a Mongoose schema and model for books
-const bookSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  genre: String,
-  publishedYear: Number
-});
-
-const Book = mongoose.model('Book', bookSchema);
+// Apply middleware
+applyMiddleware(app);
 
 // Route to add a new book
 app.post('/api/books', async (req, res) => {
@@ -144,11 +132,5 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/BookDB')
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("Failed to connect to MongoDB", err));
-
 // Start the server
-app.listen(3001, () => console.log("BookDB Service running on port 3001"));
+app.listen(3001, () => console.log("Inventory Service running on port 3001"));
