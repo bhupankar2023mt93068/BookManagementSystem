@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+</head>
+<body>
+    <h1>Book Management System</h1>
+
+    <!-- Form for creating a new book -->
+    <section>
+        <h2>Create Book</h2>
+        <form id="createBookForm">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="text" id="author" placeholder="Author" required>
+            <input type="text" id="genre" placeholder="Genre">
+            <input type="number" id="publishedYear" placeholder="Published Year">
+            <button type="submit">Create Book</button>
+        </form>
+    </section>
+
+    <!-- Form for updating a book -->
+    <section>
+        <h2>Update Book</h2>
+        <form id="updateBookForm">
+            <input type="text" id="updateId" placeholder="Book ID" required>
+            <input type="text" id="updateTitle" placeholder="Title">
+            <input type="text" id="updateAuthor" placeholder="Author">
+            <input type="text" id="updateGenre" placeholder="Genre">
+            <input type="number" id="updateYear" placeholder="Published Year">
+            <button type="submit">Update Book</button>
+        </form>
+    </section>
+
+    <!-- Form for deleting a book -->
+    <section>
+        <h2>Delete Book</h2>
+        <form id="deleteBookForm">
+            <input type="text" id="deleteId" placeholder="Book ID" required>
+            <button type="submit">Delete Book</button>
+        </form>
+    </section>
+
+    <!-- Search by ID -->
+    <section>
+        <h2>Search Book by ID</h2>
+        <form id="searchByIdForm">
+            <input type="text" id="searchId" placeholder="Enter Book ID" required>
+            <button type="submit">Search by ID</button>
+        </form>
+    </section>
+
+    <!-- Search by Title -->
+    <section>
+        <h2>Search Book by Title</h2>
+        <form id="searchByTitleForm">
+            <input type="text" id="searchTitle" placeholder="Enter Book Title" required>
+            <button type="submit">Search by Title</button>
+        </form>
+    </section>
+
+    <!-- Search by Author -->
+    <section>
+        <h2>Search Book by Author</h2>
+        <form id="searchByAuthorForm">
+            <input type="text" id="searchAuthor" placeholder="Enter Author Name" required>
+            <button type="submit">Search by Author</button>
+        </form>
+    </section>
+
+    <!-- Display books -->
+    <section>
+        <h2>Books List</h2>
+        <div id="booksList"></div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
