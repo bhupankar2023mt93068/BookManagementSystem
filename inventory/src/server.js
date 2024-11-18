@@ -10,10 +10,16 @@ const app = express();
 applyMiddleware(app);
 
 // Route to add a new book
-app.post('/api/books', async (req, res) => {
-  const { title, author, genre, publishedYear } = req.body;
-  const book = new Book({ title, author, genre, publishedYear });
+app.post('/api/books', verifyToken, async (req, res) => {
+  const { title, author, genre, publishedYear, username } = req.body;
   
+  // Ensure the username is 'admin'
+  if (username !== 'admin') {
+	return res.status(403).json({ error: 'Unauthorized: Only admin can add books.' });
+  }
+
+  // Proceed with adding the book
+  const book = new Book({ title, author, genre, publishedYear });
   try {
     const savedBook = await book.save();
     res.status(201).send(savedBook);
@@ -63,6 +69,12 @@ app.get('/api/books/:id', verifyToken, async (req, res) => {
 app.put('/api/books/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
+  const { username } = req.body; // Assuming username is passed in the body
+  
+  // Check if the username is 'admin'
+  if (username !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized: Only admin can update books.' });
+  }
 
   try {
     const updatedBook = await Book.findByIdAndUpdate(id, updates, { new: true });
@@ -78,6 +90,12 @@ app.put('/api/books/:id', verifyToken, async (req, res) => {
 // Route to delete a book by ID
 app.delete('/api/books/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
+  const { username } = req.body; // Assuming the username is sent in the request body
+  
+  // Check if the username is 'admin'
+  if (username !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized: Only admin can delete books.' });
+  }
 
   try {
     const deletedBook = await Book.findByIdAndDelete(id);
