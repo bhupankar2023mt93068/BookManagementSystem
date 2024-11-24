@@ -14,7 +14,7 @@ const bookSchema = new mongoose.Schema({
 const Book = mongoose.model('Book', bookSchema);
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/BookDB')
+mongoose.connect('mongodb+srv://2023mt93313:dbpass_123@bookmanagement.h2hjm.mongodb.net/BookDB?retryWrites=true&w=majority&appName=BookManagement')
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("Failed to connect to MongoDB", err));
 

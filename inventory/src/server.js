@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Book = require('./db/BookDB'); // Import the Book model from BookDB.js
 const applyMiddleware = require('./config/middleware'); // Import middleware.js
+const verifyToken = require('./auth/authMiddleware'); // Import the auth middleware
 
 const app = express();
 
@@ -9,10 +10,16 @@ const app = express();
 applyMiddleware(app);
 
 // Route to add a new book
-app.post('/api/books', async (req, res) => {
-  const { title, author, genre, publishedYear } = req.body;
-  const book = new Book({ title, author, genre, publishedYear });
+app.post('/api/books', verifyToken, async (req, res) => {
+  const { title, author, genre, publishedYear, username } = req.body;
   
+  // Ensure the username is 'admin'
+  if (username !== 'admin') {
+	return res.status(403).json({ error: 'Unauthorized: Only admin can add books.' });
+  }
+
+  // Proceed with adding the book
+  const book = new Book({ title, author, genre, publishedYear });
   try {
     const savedBook = await book.save();
     res.status(201).send(savedBook);
@@ -22,7 +29,7 @@ app.post('/api/books', async (req, res) => {
 });
 
 // GET /api/books - Fetch books with optional filters for title and author
-app.get('/api/books', async (req, res) => {
+app.get('/api/books', verifyToken, async (req, res) => {
     try {
         const { title, author } = req.query;
         let filter = {};
@@ -44,7 +51,7 @@ app.get('/api/books', async (req, res) => {
 });
 
 // Route to get a book by ID
-app.get('/api/books/:id', async (req, res) => {
+app.get('/api/books/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -59,9 +66,15 @@ app.get('/api/books/:id', async (req, res) => {
 });
 
 // Route to update a book by ID
-app.put('/api/books/:id', async (req, res) => {
+app.put('/api/books/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
+  const { username } = req.body; // Assuming username is passed in the body
+  
+  // Check if the username is 'admin'
+  if (username !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized: Only admin can update books.' });
+  }
 
   try {
     const updatedBook = await Book.findByIdAndUpdate(id, updates, { new: true });
@@ -75,8 +88,14 @@ app.put('/api/books/:id', async (req, res) => {
 });
 
 // Route to delete a book by ID
-app.delete('/api/books/:id', async (req, res) => {
+app.delete('/api/books/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
+  const { username } = req.body; // Assuming the username is sent in the request body
+  
+  // Check if the username is 'admin'
+  if (username !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized: Only admin can delete books.' });
+  }
 
   try {
     const deletedBook = await Book.findByIdAndDelete(id);
@@ -90,7 +109,7 @@ app.delete('/api/books/:id', async (req, res) => {
 });
 
 // Route to get a book by title
-app.get('/api/books/title/:title', async (req, res) => {
+app.get('/api/books/title/:title', verifyToken, async (req, res) => {
   const { title } = req.params;
 
   try {
@@ -105,7 +124,7 @@ app.get('/api/books/title/:title', async (req, res) => {
 });
 
 // Route to search books by title or author using query parameters
-app.get('/api/search', async (req, res) => {
+app.get('/api/search', verifyToken, async (req, res) => {
   const { title, author } = req.query; // Get title and author from query parameters
 
   // If both title and author are not provided, return a 400 error

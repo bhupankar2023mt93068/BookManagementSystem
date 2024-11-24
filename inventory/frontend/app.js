@@ -3,8 +3,8 @@ const apiUrl = 'http://localhost:3001/api/books';
 // Fetch all books
 async function fetchBooks() {
     try {
-        const response = await fetch(apiUrl);
-        const books = await response.json();
+        const res = await fetch(apiUrl);
+        const books = await res.json();
         displayBooks(books);
     } catch (error) {
         console.error('Error fetching books:', error);
@@ -88,8 +88,8 @@ document.getElementById('searchByIdForm').addEventListener('submit', async (e) =
     const bookId = document.getElementById('searchId').value;
 
     try {
-        const response = await fetch(`${apiUrl}/${bookId}`);
-        const book = await response.json();
+        const res = await fetch(`${apiUrl}/${bookId}`);
+        const book = await res.json();
         displayBooks([book]);
     } catch (error) {
         console.error('Error searching book by ID:', error);
@@ -102,8 +102,8 @@ document.getElementById('searchByTitleForm').addEventListener('submit', async (e
     const title = document.getElementById('searchTitle').value;
 
     try {
-        const response = await fetch(`${apiUrl}?title=${encodeURIComponent(title)}`);
-        const books = await response.json();
+        const res = await fetch(`${apiUrl}?title=${encodeURIComponent(title)}`);
+        const books = await res.json();
         displayBooks(books);
     } catch (error) {
         console.error('Error searching books by title:', error);
@@ -116,8 +116,8 @@ document.getElementById('searchByAuthorForm').addEventListener('submit', async (
     const author = document.getElementById('searchAuthor').value;
 
     try {
-        const response = await fetch(`${apiUrl}?author=${encodeURIComponent(author)}`);
-        const books = await response.json();
+        const res = await fetch(`${apiUrl}?author=${encodeURIComponent(author)}`);
+        const books = await res.json();
         displayBooks(books);
     } catch (error) {
         console.error('Error searching books by author:', error);
